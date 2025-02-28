@@ -1,11 +1,3 @@
-Below is a simple README file written in English as if a student completed the assignment.
-
----
-
-# Microservices Assignment - Basic Architecture
-
-This repository contains three microservices built using Python and FastAPI. The services communicate via HTTP, and the communication between **facade-service** and **logging-service** is implemented using gRPC.
-
 ## Services Overview
 
 - **facade-service**  
