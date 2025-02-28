@@ -52,6 +52,7 @@
 
 ## Notes
 
+- Results provited in dit results/  
 - The gRPC server in logging-service runs on port 50051.
 - The HTTP GET endpoint for retrieving messages in logging-service is available on port 8001.
 - Logging in the console shows the retry mechanism and deduplication behavior.
