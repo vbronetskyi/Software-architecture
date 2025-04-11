@@ -9,10 +9,9 @@ for _ in range(10_000):
     while True:
         old_value = my_map.get("counter")
         new_value = old_value + 1
-        # Спроба оновлення, якщо поточне значення не змінилось
         success = my_map.replace_if_same("counter", old_value, new_value)
         if success:
-            break  # якщо вдалося — вийти з циклу і перейти до наступного інкременту
+            break
 end = time.time()
 
 final = my_map.get("counter")

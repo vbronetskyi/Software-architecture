@@ -15,6 +15,6 @@ end = time.time()
 
 print(f"Client done in {end - start:.2f}s")
 final = map.get("counter")
-print(f"Final value (might be incorrect): {final}")
+print(f"Final value: {final}")
 
 client.shutdown()

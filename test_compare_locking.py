@@ -10,7 +10,7 @@ def run_test(label, script):
     print(result.stdout)
     print(f"Time measured: {end - start:.2f}s")
 
-# Ensure counter is reset before each test
+# reset counter before each test
 def reset_counter():
     from hazelcast import HazelcastClient
     client = HazelcastClient()

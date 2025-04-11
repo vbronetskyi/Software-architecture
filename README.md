@@ -116,5 +116,5 @@ The tests illustrate various aspects of Hazelcast's distributed data structures 
 
 These scripts provide a practical demonstration of Hazelcast's capabilities for handling distributed data structures and ensuring data consistency across a distributed system.
 
-Repo link: [hw2_hazelcast](https://github.com/vbronetskyi/Software-architecture/tree/hw2_hazelcast)
+Repo link: Repo link: [hw2_hazelcast](https://github.com/vbronetskyi/Software-architecture/tree/hw2_hazelcast)
 
