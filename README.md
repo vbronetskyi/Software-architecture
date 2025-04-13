@@ -68,9 +68,9 @@ Below are the placeholders for required screenshots. Replace the placeholder pat
 
 ### 3. Screenshot of a GET request with 10 Messages
 
-![GET Request message](msg_GET.png)
+![GET Request message](./results/msg_GET.png)
 
-![GET Request with 10 messages](msg10_GET.png)
+![GET Request with 10 messages](./results/msg_10GET.png)
 
 ## logs and Demonstration
 
