@@ -1,0 +1,30 @@
+version: '3'
+services:
+  facade-service:
+    build: ./facade-service
+    ports:
+      - "8000:8000"
+    depends_on:
+      - logging-service
+      - messages-service
+      - config-server
+      - hazelcast-server
+
+  logging-service:
+    build: ./logging-service
+    # Внутрішнє сполучення; зовнішній порт не оприлюднюємо
+
+  messages-service:
+    build: ./messages-service
+    ports:
+      - "8002:8002"
+
+  config-server:
+    build: ./config-server
+    ports:
+      - "8003:8003"
+
+  hazelcast-server:
+    image: hazelcast/hazelcast
+    ports:
+      - "5701:5701"
