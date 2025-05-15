@@ -1,6 +1,8 @@
 # Lab 5: Service discovery & config server with consul
 
-У реалізації Lab 5, де до нашої системи з попередньої лабораторної додається Consul як Service Registry, Discovery та Config Server.  
+By Bronetskyi Volodymyr
+
+У цій Lab 5, де до нашої системи з попередньої лабораторної додається Consul як Service Registry, Discovery та Config Server.  
 
 Сервіси:
 - **facade-service** — приймає HTTP POST/GET, звертається до logging-service і messages-service  
