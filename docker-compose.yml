@@ -1,0 +1,122 @@
+version: "3.8"
+
+services:
+  # === Consul Server ===
+  consul:
+    image: hashicorp/consul:1.15
+    container_name: hw5-consul-1
+    ports:
+      - "8500:8500"      # HTTP UI/API
+      - "8600:8600/udp"  # DNS
+    volumes:
+      - consul-data:/consul/data
+      - ./consul/config:/consul/config
+    command: agent -server -bootstrap-expect=1 -ui -client=0.0.0.0 -config-dir=/consul/config
+
+  # === Consul KV initializer ===
+  consul-init:
+    image: curlimages/curl:7.85.0
+    depends_on:
+      - consul
+    volumes:
+      - ./populate-kv.sh:/populate-kv.sh:ro
+    entrypoint: ["sh", "/populate-kv.sh"]
+
+  #zookeeper for kafka
+  zookeeper:
+    image: bitnami/zookeeper:3.8
+    container_name: hw5-zookeeper-1
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    ports:
+      - "2181:2181"
+
+  # Kafka brokers
+  kafka1:
+    image: bitnami/kafka:3
+    container_name: hw5-kafka1-1
+    depends_on:
+      - zookeeper
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka1:9092
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    ports:
+      - "9092:9092"
+
+  kafka2:
+    image: bitnami/kafka:3
+    container_name: hw5-kafka2-1
+    depends_on:
+      - zookeeper
+    environment:
+      - KAFKA_BROKER_ID=2
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka2:9092
+      - ALLOW_PLAINTEXT_LISTENER=yes
+
+  kafka3:
+    image: bitnami/kafka:3
+    container_name: hw5-kafka3-1
+    depends_on:
+      - zookeeper
+    environment:
+      - KAFKA_BROKER_ID=3
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka3:9092
+      - ALLOW_PLAINTEXT_LISTENER=yes
+
+  facade-service:
+    build:
+      context: ./facade-service
+      dockerfile: Dockerfile
+    depends_on:
+      - consul
+      - consul-init
+      - kafka1
+      - kafka2
+      - kafka3
+    environment:
+      - SERVICE_PORT=8000
+      - CONSUL_HOST=consul
+      - CONSUL_PORT=8500
+    ports:
+      - "8000:8000"
+
+  logging-service:
+    build:
+      context: ./logging-service
+      dockerfile: Dockerfile
+    depends_on:
+      - consul
+      - consul-init
+    environment:
+      - SERVICE_PORT=8001
+      - CONSUL_HOST=consul
+      - CONSUL_PORT=8500
+    ports:
+      - "8001"
+
+  messages-service:
+    build:
+      context: ./messages-service
+      dockerfile: Dockerfile
+    depends_on:
+      - consul
+      - consul-init
+      - kafka1
+      - kafka2
+      - kafka3
+    environment:
+      - SERVICE_PORT=8002
+      - CONSUL_HOST=consul
+      - CONSUL_PORT=8500
+    ports:
+      - "8002"
+
+volumes:
+  consul-data:
